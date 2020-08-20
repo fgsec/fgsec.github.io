@@ -5,7 +5,7 @@ A few days ago I started taking interest in Bolt, a content management that quot
 
 The team behind it really did a great job in making the CMS easy to use, and packed with a lot of features. I truly recommend you checking out their project if you are looking for a cool new CMS to use.
 
-<img src="images/2020-40-20-From-CSRF-to-RCE_01.png">
+<img src="/images/2020-40-20-From-CSRF-to-RCE_01.png">
 
 ## Affected Version
 
