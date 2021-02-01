@@ -113,7 +113,7 @@ We extracted only the essential part of the original web shell, which means that
 
 ### How AV detects your Web Shell
 
-You may find cases where AVs will flag your file if you carry something as simple as a string called "Mimikatz" to the combination of specific functions, file reputation and even run our file in some cloud sandbox. In the end of the day, security solutions won't ~~or shouldn't~~ just simply flag your file because it uses "WSCRIPT.SHELL" or has a string called "cmd". 
+You may find cases where AVs will flag your file if you carry something as simple as a string called "Mimikatz" to the combination of specific functions, file reputation and even run our file in some cloud sandbox. In general, security solutions won't ~~or shouldn't~~ just simply flag your file because it uses "WSCRIPT.SHELL" or has a string called "cmd". 
 
 <html><blockquote class="twitter-tweet"><p lang="en" dir="ltr">When your program name is more the new EICAR than a security tool <a href="https://t.co/ldZkKzgHGW">https://t.co/ldZkKzgHGW</a></p>&mdash; 🥝 Benjamin Delpy (@gentilkiwi) <a href="https://twitter.com/gentilkiwi/status/1161684030108119042?ref_src=twsrc%5Etfw">August 14, 2019</a></blockquote> </html>
 
