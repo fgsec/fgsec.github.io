@@ -148,11 +148,9 @@ What can we do about it?
 We can transform our string into something that will only make sense when executed. There's a couple of ways to achieve this and I'll be showing you the easiest way:
 
 {% highlight vb %}
-...
 Dim x
 x = Split("a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s",",")
 Execute("Set oScript = "+x(2)+"reate"+x(14)+"bject(""WSCRIPT.SHELL"")")
-...
 {% endhighlight %}
 
 With "Split()" we created a simple dictionary that can then be used to create the strings that are getting blocked. The "Execute()" acts in the same way as an "Eval()", but in this context the code will be treated as a simple assignment statement whereas with eval it would result in a comparison ([you can read more here](https://docs.microsoft.com/en-us/previous-versions//0z5x4094(v=vs.85)?redirectedfrom=MSDN)). 
