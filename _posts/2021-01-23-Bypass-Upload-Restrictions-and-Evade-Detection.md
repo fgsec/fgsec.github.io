@@ -90,8 +90,6 @@ Response.Write(thisDir)
 %>
 {% endhighlight %}
 
-
-```
 And voila.. we have a simple web shell:
 
 ![post02-02](/images/post02-02.png)
