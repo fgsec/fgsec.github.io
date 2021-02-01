@@ -49,7 +49,7 @@ Response.write("Hey there!")
 ```
 Visiting this with your browser should look like the image below, note that our code was inside the "<% %>".
 
-![](images/post02-01.PNG)
+![](/images/post02-01.PNG)
 
 We can see our message printed right at the end, but this is not what we want, let's abuse this to achieve remote code execution!
 
@@ -90,7 +90,7 @@ Response.Write(thisDir)
 ```
 And voila.. we have a simple web shell:
 
-![post02-02](images/post02-02.png)
+![post02-02](/images/post02-02.png)
 
 But wait, are we safe to use this code already? 
 Won't AV solutions flag us? **Yes** and **No**! 
@@ -99,7 +99,7 @@ Running the original code against [VirusTotal results on 15](https://www.virusto
 
 **No detection at all!**
 
-![post02-03](images/post02-03.png)
+![post02-03](/images/post02-03.png)
 
 **How, you ask?** 
 
@@ -167,17 +167,17 @@ For this, we'll use [Process Monitor](https://docs.microsoft.com/en-us/sysintern
 
 To keep things simple, add a filter (ctrl+l) to display only entries for Process name "w3wp.exe" and "cmd.exe":
 
-![post02-04](images/post02-04.png)
+![post02-04](/images/post02-04.png)
 
 Then, execute a simple "whoami" command with our webshell. 
 
 Eventually, you will see an entry for "Process Create" operation for "cmd.exe" from the "w3wp.exe" binary:
 
-![post02-05](images/post02-05.png)
+![post02-05](/images/post02-05.png)
 
 Examining further, we can see the executed command along with it's parameters:
 
-![post02-06](images/post02-06.png)
+![post02-06](/images/post02-06.png)
 
 This is exactly what sysmon and some EDR solutions will look for. So there goes all the work we put into getting our code executed.
 
@@ -191,11 +191,11 @@ Let's drop our DLL stager on disk and use rundll32 to execute it:
 
 Aaaand.... as you can see:
 
-![post02-07](images/post02-07.png)
+![post02-07](/images/post02-07.png)
 
 We are still using "w3wp.exe" to spawn processes:
 
-![post02-08](images/post02-08.png)
+![post02-08](/images/post02-08.png)
 
 The question is, can we execute our stager directly without needing to spawn a new process? 
 
@@ -215,7 +215,7 @@ You can use an already existing example project "ExampleAssembly" that comes ins
 
 I'll be doing something simple for this post and write a file to disk:
 
-![post02-09](images/post02-09.png)
+![post02-09](/images/post02-09.png)
 
 Now, rebuild the entire solution... and we should have both **DotNetToJScript** binary and **ExampleAssembly** DLL ready to go.
 
@@ -383,17 +383,17 @@ End If
 
 As expected, after execution the file is created:
 
-![post02-11](images/post02-11.png)
+![post02-11](/images/post02-11.png)
 
 Now, back to process monitor.. if we filter only "Process Create" operations and run our web shell again, we get 0 results:
 
-![post02-12](images/post02-12.png)
+![post02-12](/images/post02-12.png)
 
 Now, you may think that we are done.. **but we are not.** (cry face)
 
 Remember from "Step 2" that some AVs may create detection based on the usage and pattern of known malicious files and scripts?
 
-![post02-13](images/post02-13.png)
+![post02-13](/images/post02-13.png)
 
 We could try to apply what I've showed so far, but let's learn another useful technique to avoid detection.
 
@@ -446,9 +446,9 @@ eval fg
 
 And now.. **0** detections.
 
-![post02-14](images/post02-14.png)
+![post02-14](/images/post02-14.png)
 
 We can use any b64 encoded payload we want and get it executed through our web shell stager:
 
-![post02-15](images/post02-15.png)
+![post02-15](/images/post02-15.png)
 
