@@ -1,5 +1,6 @@
 ---
 layout: post
+Title: "From CSRF to RCE"
 ---
 A few days ago I started taking interest in Bolt, a content management that quoting from its github, is a "[Sophisticated, lightweight & simple CMS][bolt]".
 

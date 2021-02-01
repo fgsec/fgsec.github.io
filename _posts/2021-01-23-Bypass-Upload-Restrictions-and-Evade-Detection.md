@@ -1,3 +1,7 @@
+---
+layout: post
+Title: "Bypass Upload Restrictions and Evade Detection"
+---
 Let's be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can't always do this without getting caught by the Blue Team.
 
 On this post I'll be showing a combination of an old technique to bypass upload restriction on ASP/.NET applications and some ways to evade detection.
