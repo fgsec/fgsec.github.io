@@ -1,5 +1,3 @@
-# Injecting dotNet Assemblies to Unmanaged Processes
-
 This is a quick post to show how you can inject your .NET assembly code to unmanaged processes.
 
 ### Generate the ShellCode
