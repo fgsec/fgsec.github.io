@@ -1,6 +1,7 @@
 ---
-layout: post
-Title: "From CSRF to RCE"
+title: "From CSRF to RCE"
+author: Felipe Gaspar
+date: 2021-01-23 00:00:00 +0800
 ---
 A few days ago I started taking interest in Bolt, a content management that quoting from its github, is a "[Sophisticated, lightweight & simple CMS][bolt]".
 
@@ -49,7 +50,7 @@ This means that we, attackers, can execute arbitrary JavaScript in the same cont
 
 A simple code to exploit CSRF and upload an HTML file is provided below (with the help of Burp Pro), it will upload a "test.html" file that can be located in a default path for every bolt installation: "/files/YEAR-MONTH" in my case: "victim.com/files/2019-04/test.html":
 
-{% highlight html %}
+```html
 <html>
   <body>
   <script>history.pushState('', '', '/')</script>
@@ -80,7 +81,7 @@ A simple code to exploit CSRF and upload an HTML file is provided below (with th
     </form>
   </body>
 </html>
-{% endhighlight %}
+```
 
 ## About the RCE
 
@@ -126,8 +127,7 @@ Our exploration will have the following path:
 https://www.exploit-db.com/exploits/46664
 
 
-{% highlight html %}
-
+```javascript
 <html>
   <body>
   <script>history.pushState('', '', '/')</script>
@@ -238,7 +238,7 @@ https://www.exploit-db.com/exploits/46664
   </body>
 </html>
 
-{% endhighlight %}
+```javascript
 
 ## Disclosure Timeline
 

