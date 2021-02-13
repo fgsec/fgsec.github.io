@@ -1,6 +1,7 @@
 ---
 title: "Bypass Upload Restrictions and Evade Detection"
 author: Felipe Gaspar
+date: 2021-01-23 00:00:00 +0800
 ---
 Let's be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can't always do this without getting caught by the Blue Team.
 

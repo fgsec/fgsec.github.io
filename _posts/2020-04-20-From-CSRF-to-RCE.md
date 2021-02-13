@@ -1,7 +1,7 @@
 ---
 title: "From CSRF to RCE"
 author: Felipe Gaspar
-date: 2021-01-23 00:00:00 +0800
+date: 2020-04-20 00:00:00 +0800
 ---
 A few days ago I started taking interest in Bolt, a content management that quoting from its github, is a "[Sophisticated, lightweight & simple CMS][bolt]".
 

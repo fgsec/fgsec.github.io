@@ -1,6 +1,7 @@
 ---
 title: "Injecting dotNet Assemblies to Unmanaged Processes"
 author: Felipe Gaspar
+date: 2021-02-10 00:00:00 +0800
 ---
 This is a quick post to show how you can inject your .NET assembly code to unmanaged processes.
 
