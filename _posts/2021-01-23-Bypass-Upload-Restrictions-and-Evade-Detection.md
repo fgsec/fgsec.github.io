@@ -188,7 +188,9 @@ One may think that the simple thing here would be to replace cmd with some other
 
 Let's drop our DLL stager on disk and use rundll32 to execute it:
 
-`rundll32.exe C:\inetpub\wwwroot\application\notsuspicious.dll,Start`
+```console
+rundll32.exe C:\inetpub\wwwroot\application\notsuspicious.dll,Start
+```
 
 Aaaand.... as you can see:
 
@@ -224,7 +226,9 @@ Now, rebuild the entire solution... and we should have both **DotNetToJScript** 
 
 Since we are using the TestClass example that comes with the tool, we can execute the following command:
 
-`.\DotNetToJScript.exe ExampleAssembly.dll -o="output.vbs" --ver=None --lang=VBScript`
+```console
+.\DotNetToJScript.exe ExampleAssembly.dll -o="output.vbs" --ver=None --lang=VBScript
+```
 
 The first parameter (ExampleAssembly.dll) is our payload created in the last step, then our output location and some options. I recommend you testing the best option for you, since this may variate accordingly to your target, but `--ver=None` will result in a version without "WSCRIPT.SHELL", which is exactly what we want. 
 

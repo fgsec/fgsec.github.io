@@ -11,7 +11,7 @@ As an example, I will be using a Mythic implant. But feel free to develop your o
 
 For this task we will use the Donut project, you can read more about it [here.](https://github.com/TheWover/donut)
 
-The syntax is very simple, we need to indicate our payload (-f), the Class preceded by the Namespace (c) and the method to be executed (m). You can specify the system architecture (-a), with 1 for x86 and 2 for amd64:
+The syntax is very simple, we need to indicate our payload (-f), the Class preceded by the Namespace (-c) and the method to be executed (-m). You can specify the system architecture (-a), with 1 for x86 and 2 for amd64:
 
 ```powershell
 .\donut.exe -f .\atlas_callback.exe -c Atlas.Program -m Main -a 2
