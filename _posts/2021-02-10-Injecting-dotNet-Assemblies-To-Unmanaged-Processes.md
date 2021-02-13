@@ -67,9 +67,11 @@ namespace Injection {
     }
 }
 ```
-If all goes well, your code will be executed within the target process.
+### Conclusion
 
-In my case, I can confirm by looking at the callback in Mythic and crossing with the PID of the target process:
+That's it! Your code will be executed within the target process.
+
+In my case, I can confirm by looking at the callback in Mythic and crossing with the PID of the target process (notepad.exe):
 
 ![](/images/2021-02-10-10-45-49.png)
 ![](/images/2021-02-10-10-42-09.png)

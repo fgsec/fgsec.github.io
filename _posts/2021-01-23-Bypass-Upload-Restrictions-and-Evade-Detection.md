@@ -199,7 +199,7 @@ We are still using "w3wp.exe" to spawn processes:
 
 The question is, can we execute our stager directly without needing to spawn a new process? 
 
-## Step 3 - Run our code
+## Step 4 - Run our code
 
 For this task we'll be using **DotNetToJScript**. You can read more about this awesome project here: https://github.com/tyranid/DotNetToJScript.
 
