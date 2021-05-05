@@ -133,11 +133,17 @@ if (isHooked(instructions[0])) {
 }
 ```
 
-The function ```isHooked()``` is just checking if the first byte is diferent from what a normal execution would be (4C8BD1). You can do something more reliable by checking all 4 bytes, but for this demonstration this is sufficient.
+The function ```isHooked()``` is just checking if the first byte is diferent from what a normal execution would be (4C8BD1B8). You can do something more reliable by checking all 4 bytes, but for this demonstration this is sufficient.
 
 Ok, now we know how to tell if our function is hooked, all that remains is to look for the neighbor's number and deduct the correct value.
 
 ```csharp
+static byte[] syscallStruct = {
+  0x4C, 0x8B, 0xD1,               // mov r10, rcx
+  0xB8, 0xFF, 0x00, 0x00, 0x00,   // mov eax, FUNC
+  0x0F, 0x05,                     // syscall
+  0xC3                            // ret
+};
 public static bool returnBasedOnNeighbor(IntPtr funcAddress) {
     byte counter = 1;
     while(true) {
