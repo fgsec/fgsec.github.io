@@ -7,7 +7,7 @@ This post aims to describe and provide example code on how you can dynamically r
 
 ## What are System calls?
 
-****TL;DR****: System calls or just *syscalls* are used by applications to perform tasks that are executed by the kernel, such as opening files, allocating memory, and so on. In the offensive context, you can use them to evade API hooks used by security products to intercept and record calls from software.
+**TL;DR**: System calls or just *syscalls* are used by applications to perform tasks that are executed by the kernel, such as opening files, allocating memory, and so on. In the offensive context, you can use them to evade API hooks used by security products to intercept and record calls from software.
 
 If you are new to this subject, I would recommend reading [this post by Jack Halon](https://jhalon.github.io/utilizing-syscalls-in-csharp-1/), which explains very well how syscalls work and even how to use them in csharp.
 
@@ -27,7 +27,7 @@ Okay, before we start, remember that the technique presented here is just an exa
 
 As a reminder, it's possible to confirm a hook by inspecting the first bytes of a function memory region, where we would find something like this:
 
-```assembly
+```nasm
 0000000000000000 E9F330CDFE                      JMP 00000000-132CF08
 0000000000000005 90                              NOP
 0000000000000006 90                              NOP
@@ -42,7 +42,7 @@ Note the ```JMP``` instruction, this is a common way to divert execution to a di
 
 In constrast, the following instructions are a common syscall execution, we can also confirm that the syscall number for "NtAllocateVirtualMemory" is ```00000018```.
 
-```assembly
+```nasm
 0000000000000000 4C8BD1                          MOV R10,RCX
 0000000000000003 B819000000                      MOV EAX,00000018
 0000000000000008 F604250803FE7F01                TEST BYTE PTR [000000007FFE0308],01
