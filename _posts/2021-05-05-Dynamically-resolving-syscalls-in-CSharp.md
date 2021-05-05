@@ -27,7 +27,7 @@ Okay, before we start, remember that the technique presented here is just an exa
 
 As a reminder, it's possible to confirm a hook by inspecting the first bytes of a function memory region, where we would find something like this:
 
-```asm
+```assembly
 0000000000000000 E9F330CDFE                      JMP 00000000-132CF08
 0000000000000005 90                              NOP
 0000000000000006 90                              NOP
@@ -42,7 +42,7 @@ Note the ```JMP``` instruction, this is a common way to divert execution to a di
 
 In constrast, the following instructions are a common syscall execution, we can also confirm that the syscall number for "NtAllocateVirtualMemory" is ```00000018```.
 
-```asm
+```assembly
 0000000000000000 4C8BD1                          MOV R10,RCX
 0000000000000003 B819000000                      MOV EAX,00000018
 0000000000000008 F604250803FE7F01                TEST BYTE PTR [000000007FFE0308],01
@@ -165,4 +165,7 @@ Compiling these functions in a single code, we have a functional example of this
 
 ![](/images/post4-04.png)
 
+That's it!
+
+The complete code will be available on my [github](https://github.com/fgsec).
 
