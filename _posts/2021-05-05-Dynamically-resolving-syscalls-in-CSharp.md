@@ -28,14 +28,14 @@ Okay, before we start, remember that the technique presented here is just an exa
 As a reminder, it's possible to confirm a hook by inspecting the first bytes of a function memory region, where we would find something like this:
 
 ```nasm
-0000000000000000 E9F330CDFE                      JMP 00000000-132CF08
-0000000000000005 90                              NOP
-0000000000000006 90                              NOP
-0000000000000007 90                              NOP
-0000000000000008 F604250803FE7F01                TEST BYTE PTR [000000007FFE0308],01
-0000000000000010 7503                            JNE 0000000000000015
-0000000000000012 0F05                            SYSCALL
-0000000000000014 C3                              RET
+JMP 00000000132CF08
+NOP
+NOP
+NOP
+TEST BYTE PTR [000000007FFE0308],01
+JNE 0000000000000015
+SYSCALL
+RET
 ```
 
 Note the ```JMP``` instruction, this is a common way to divert execution to a different memory region, usually with code that will analyze whether the execution is malicious or not.
@@ -43,12 +43,12 @@ Note the ```JMP``` instruction, this is a common way to divert execution to a di
 In constrast, the following instructions are a common syscall execution, we can also confirm that the syscall number for "NtAllocateVirtualMemory" is ```00000018```.
 
 ```nasm
-0000000000000000 4C8BD1                          MOV R10,RCX
-0000000000000003 B819000000                      MOV EAX,00000018
-0000000000000008 F604250803FE7F01                TEST BYTE PTR [000000007FFE0308],01
-0000000000000010 7503                            JNE 0000000000000015
-0000000000000012 0F05                            SYSCALL
-0000000000000014 C3                              RET
+MOV R10,RCX
+MOV EAX,00000018
+TEST BYTE PTR [000000007FFE0308],01
+JNE 0000000000000015
+SYSCALL
+RET
 ```
 
 As you can see, a hooked function prevents obtaining the syscall number. This is one of the problems that techniques like the one that will be presented try to solve.
