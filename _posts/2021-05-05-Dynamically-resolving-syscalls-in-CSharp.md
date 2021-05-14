@@ -61,7 +61,8 @@ Let's look at why and how this is possible.
 
 If we were to inspect the [export directory table](https://docs.microsoft.com/en-us/windows/win32/debug/pe-format#export-directory-table) from ```ntdll.dll``` in search of the "NtAllocateVirtualMemory" entry, we would obtain a list of exported functions like this:
 
-![](/images/post4-01.png)
+![List](/images/post4-01.png)
+
 
 *(I'm using IDA to inspect the file, but you can use tools such as [CFF Explorer](https://ntcore.com/?page_id=388))*
 
