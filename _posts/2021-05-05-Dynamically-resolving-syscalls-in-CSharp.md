@@ -28,12 +28,9 @@ Okay, before we start, remember that the technique presented here is just an exa
 As a reminder, it's possible to confirm a hook by inspecting the first bytes of a function memory region, where we would find something like this:
 
 ```nasm
-JMP 00000000132CF08
-NOP
-NOP
-NOP
+JMP 0132CF08
 TEST BYTE PTR [000000007FFE0308],01
-JNE 0000000000000015
+JNE 00000015
 SYSCALL
 RET
 ```
@@ -46,7 +43,7 @@ In constrast, the following instructions are a common syscall execution, we can 
 MOV R10,RCX
 MOV EAX,00000018
 TEST BYTE PTR [000000007FFE0308],01
-JNE 0000000000000015
+JNE 00000015
 SYSCALL
 RET
 ```
