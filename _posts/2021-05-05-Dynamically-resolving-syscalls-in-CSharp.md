@@ -29,7 +29,7 @@ As a reminder, it's possible to confirm a hook by inspecting the first bytes of 
 
 ```nasm
 JMP 0132CF08
-TEST BYTE PTR [000000007FFE0308],01
+TEST BYTE PTR [7FFE0308],01
 JNE 00000015
 SYSCALL
 RET
@@ -42,7 +42,7 @@ In constrast, the following instructions are a common syscall execution, we can 
 ```nasm
 MOV R10,RCX
 MOV EAX,00000018
-TEST BYTE PTR [000000007FFE0308],01
+TEST BYTE PTR [7FFE0308],01
 JNE 00000015
 SYSCALL
 RET
